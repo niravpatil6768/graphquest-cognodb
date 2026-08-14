@@ -121,29 +121,48 @@ export const getDeveloperById = async (
     };
 };
 
-export const searchDevelopers = async (
-    skill: string,
-    technology: string
-): Promise<Developer[]> => {
+interface SearchDeveloperFilters {
+    skill?: string;
+    technology?: string;
+}
+
+export const searchDevelopers = async ({
+    skill,
+    technology,
+}: SearchDeveloperFilters): Promise<Developer[]> => {
+    const conditions: string[] = [];
+    const params: Record<string, string> = {};
+
+    if (skill) {
+        conditions.push("toLower(s.name) = toLower($skill)");
+        params.skill = skill;
+    }
+
+    if (technology) {
+        conditions.push("toLower(t.name) = toLower($technology)");
+        params.technology = technology;
+    }
+
+    const whereClause =
+        conditions.length > 0
+            ? `WHERE ${conditions.join(" AND ")}`
+            : "";
+
     const result = await driver.executeQuery(
         `
-    MATCH (d:Developer)-[:HAS_SKILL]->(s:Skill),
-          (d)-[:WORKED_ON]->(p:Project)-[:USES]->(t:Technology)
+        MATCH (d:Developer)-[:HAS_SKILL]->(s:Skill),
+              (d)-[:WORKED_ON]->(p:Project)-[:USES]->(t:Technology)
 
-    WHERE toLower(s.name) = toLower($skill)
-      AND toLower(t.name) = toLower($technology)
+        ${whereClause}
 
-    RETURN DISTINCT
-      d.id AS id,
-      d.name AS name,
-      d.title AS title
+        RETURN DISTINCT
+          d.id AS id,
+          d.name AS name,
+          d.title AS title
 
-    ORDER BY d.name
-    `,
-        {
-            skill,
-            technology,
-        }
+        ORDER BY d.name
+        `,
+        params
     );
 
     return result.records.map((record) => ({

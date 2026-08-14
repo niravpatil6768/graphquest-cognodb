@@ -71,7 +71,7 @@ export const fetchDeveloperById = createAsyncThunk<
 
 export const searchDevelopers = createAsyncThunk<
     Developer[],
-    { skill: string; technology: string },
+    { skill?: string; technology?: string },
     { rejectValue: string }
 >(
     "developers/searchDevelopers",

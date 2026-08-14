@@ -69,19 +69,26 @@ export const searchDevelopersController = async (
     res: Response
 ): Promise<void> => {
     try {
-        const skill = String(req.query.skill || "").trim();
-        const technology = String(req.query.technology || "").trim();
+        const { skill, technology } = req.query;
 
-        if (!skill || !technology) {
+        const skillValue =
+            typeof skill === "string" ? skill.trim() : "";
+
+        const technologyValue =
+            typeof technology === "string" ? technology.trim() : "";
+
+        if (!skillValue && !technologyValue) {
             res.status(400).json({
                 success: false,
-                message: "Skill and technology are required",
+                message: "At least one of skill or technology is required",
             });
-
             return;
         }
 
-        const developers = await searchDevelopers(skill, technology);
+        const developers = await searchDevelopers({
+            skill: skillValue || undefined,
+            technology: technologyValue || undefined,
+        });
 
         res.status(200).json({
             success: true,
