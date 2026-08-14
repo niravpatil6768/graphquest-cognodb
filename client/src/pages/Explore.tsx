@@ -15,12 +15,9 @@ import Stats from "../components/Stats";
 export default function Explore() {
   const dispatch = useAppDispatch();
 
-  const {
-    developers,
-    stats,
-    loading,
-    error,
-  } = useAppSelector((state) => state.developers);
+  const { developers, stats, loading, error } = useAppSelector(
+    (state) => state.developers,
+  );
 
   const [skill, setSkill] = useState("");
   const [technology, setTechnology] = useState("");
@@ -40,7 +37,7 @@ export default function Explore() {
       searchDevelopers({
         skill,
         technology,
-      })
+      }),
     );
   };
 
@@ -67,8 +64,8 @@ export default function Explore() {
           </h1>
 
           <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-500">
-            Explore relationships between developers, skills,
-            projects and technologies using a graph database.
+            Explore relationships between developers, skills, projects and
+            technologies using a graph database.
           </p>
         </section>
 
@@ -92,8 +89,8 @@ export default function Explore() {
             </h2>
 
             <p className="mt-1 text-sm text-zinc-500">
-              Find developers by traversing their skill and
-              project relationships.
+              Find developers by traversing their skill and project
+              relationships.
             </p>
           </div>
 
@@ -134,9 +131,7 @@ export default function Explore() {
               <select
                 id="technology"
                 value={technology}
-                onChange={(event) =>
-                  setTechnology(event.target.value)
-                }
+                onChange={(event) => setTechnology(event.target.value)}
                 className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500 focus:ring-2 focus:ring-zinc-200"
               >
                 <option value="">Any technology</option>
@@ -168,7 +163,6 @@ export default function Explore() {
                     {skill}
                   </span>
                 )}
-
                 {technology && (
                   <span className="ml-2 rounded-md bg-zinc-100 px-2 py-1 font-medium text-zinc-700">
                     {technology}
@@ -198,31 +192,20 @@ export default function Explore() {
           </h2>
 
           <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-400">
-            Developers, skills, projects and technologies are
-            connected as graph entities, allowing
-            relationship-based queries across multiple hops.
+            Developers, skills, projects and technologies are connected as graph
+            entities, allowing relationship-based queries across multiple hops.
           </p>
 
           <div className="mt-5 flex flex-wrap items-center gap-2 text-sm">
-            <span className="rounded-lg bg-white/10 px-3 py-2">
-              Developer
-            </span>
+            <span className="rounded-lg bg-white/10 px-3 py-2">Developer</span>
 
-            <span className="text-zinc-500">
-              →
-            </span>
+            <span className="text-zinc-500">→</span>
 
-            <span className="rounded-lg bg-white/10 px-3 py-2">
-              Project
-            </span>
+            <span className="rounded-lg bg-white/10 px-3 py-2">Project</span>
 
-            <span className="text-zinc-500">
-              →
-            </span>
+            <span className="text-zinc-500">→</span>
 
-            <span className="rounded-lg bg-white/10 px-3 py-2">
-              Technology
-            </span>
+            <span className="rounded-lg bg-white/10 px-3 py-2">Technology</span>
           </div>
         </section>
 
@@ -234,9 +217,7 @@ export default function Explore() {
                 Unable to load graph data
               </p>
 
-              <p className="mt-1 text-sm text-red-700">
-                {error}
-              </p>
+              <p className="mt-1 text-sm text-red-700">{error}</p>
             </div>
 
             <button
@@ -270,14 +251,11 @@ export default function Explore() {
           {loading ? (
             <LoadingState />
           ) : developers.length === 0 ? (
-            <EmptyState />
+            <EmptyState message={""} />
           ) : (
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {developers.map((developer) => (
-                <DeveloperCard
-                  key={developer.id}
-                  developer={developer}
-                />
+                <DeveloperCard key={developer.id} developer={developer} />
               ))}
             </div>
           )}

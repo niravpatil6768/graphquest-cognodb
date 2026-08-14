@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import GraphPath from "../components/GraphPath";
-
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 
 import { fetchDeveloperById } from "../features/developers/developerSlice";
